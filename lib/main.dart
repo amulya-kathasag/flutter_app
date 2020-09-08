@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
 
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Create a new Product'),
     );
   }
 }
@@ -45,6 +45,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int _views;
   int _total_order;
   int _total_revenue;
+  String _status;
+  var _statusOptions =['ACTIVE','NOT ACTIVE'];
+  var _currentStatusSelected = 'ACTIVE';
 
   final GlobalKey<_MyHomePageState> _form = GlobalKey<_MyHomePageState>();
 
@@ -126,6 +129,32 @@ class _MyHomePageState extends State<MyHomePage> {
           WhitelistingTextInputFormatter.digitsOnly
         ]
     );
+
+  }
+  Widget _buildStatus(){
+
+    return Row(
+      children: <Widget>[
+        Text('Status',
+        style: TextStyle(fontSize: 16),),
+        SizedBox(width: 50,),
+        DropdownButton<String> (
+          items: _statusOptions.map((String dropDownStringItem){
+            return DropdownMenuItem<String>(
+              value: dropDownStringItem,
+              child:
+              Text(dropDownStringItem),
+            );
+
+          }).toList(),
+
+          onChanged: (String newValueSelected){
+            dropDownItemSelected(newValueSelected);
+          },
+          value: _currentStatusSelected,
+        ),
+      ],
+    );
   }
 
 
@@ -140,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body:Container(
-        padding: const EdgeInsets.symmetric(horizontal: 43.0),
+        padding: const EdgeInsets.all(24),
         child: Form(
 
           child: Column(
@@ -155,9 +184,13 @@ class _MyHomePageState extends State<MyHomePage> {
               _buildViewsField(),
               _buildOrderField(),
               _buildRevenueField(),
-              SizedBox(height: 8),
+              SizedBox(height: 5),
+              _buildStatus(),
+              SizedBox(height: 15),
               RaisedButton(
-                child: Text('Post',),
+                child: Text('Post', style: TextStyle(
+                  color: Colors.white,
+                ),),
               )
 
             ],
@@ -167,5 +200,11 @@ class _MyHomePageState extends State<MyHomePage> {
       )
        // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  void dropDownItemSelected(String newValue){
+    setState(() {
+      this._currentStatusSelected = newValue;
+    });
   }
 }
